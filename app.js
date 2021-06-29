@@ -25,9 +25,13 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname + "/views"));
 app.use(express.static(path.join(__dirname + "/public")));
 app.use(express.urlencoded({ extented: true }));
+app.use(express.json());
 
 // Routes
 const authRoutes = require("./routes/authRoutes");
+
+// APIs
+const postsApiRoute = require('./routes/api/posts');
 
 // Express_Session
 app.use(
@@ -56,8 +60,13 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+
+// Using APIs
+
+app.use(postsApiRoute);
+
 app.get("/", isLoggedIn, (req, res) => {
-  res.render("home");
+  res.render("layouts/main-layouts");
 });
 
 app.listen(3000, () => {

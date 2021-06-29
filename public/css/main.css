@@ -22,7 +22,8 @@ nav a {
   justify-content: center;
   align-items: center;
   text-decoration: none;
-  color: var(--twitter-ka-color);
+  /* color: var(--twitter-ka-color); */
+  color: black;
 }
 
 nav a:hover {
