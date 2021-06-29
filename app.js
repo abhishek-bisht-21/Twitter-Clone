@@ -3,11 +3,11 @@ const app = express();
 const mongoose = require("mongoose");
 const path = require("path");
 const session = require("express-session");
-const passport = require('passport');
-const LocalStrategy = require('passport-local');
-const User = require('./models/user');
-const { isLoggedIn } = require('./middleware');
-const flash = require('connect-flash');
+const passport = require("passport");
+const LocalStrategy = require("passport-local");
+const User = require("./models/user");
+const { isLoggedIn } = require("./middleware");
+const flash = require("connect-flash");
 
 // For Mongoose
 mongoose
@@ -22,8 +22,8 @@ mongoose
 
 // Middlewares For ViewEngine,Public Folder,FormDataParsing
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "/views"));
-app.use(express.static(path.join(__dirname, "/public")));
+app.set("views", path.join(__dirname + "/views"));
+app.use(express.static(path.join(__dirname + "/public")));
 app.use(express.urlencoded({ extented: true }));
 
 // Routes
@@ -38,23 +38,25 @@ app.use(
     saveUninitialized: true,
   })
 );
-app.use(authRoutes);
 
 
+// Required when we are using sessions and passport
+app.use(passport.initialize());
+app.use(passport.session());
 // Authentication and session Related Middlewares
 app.use(flash());
 
-app.use(passport.initialize());
-app.use(passport.session());
+
+
+app.use(authRoutes);
 
 
 passport.use(new LocalStrategy(User.authenticate()));
+// Behind the scenes these inbuilt functions manages creating and destroying the session of user
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
-
-app.get("/", (req, res) => {
+app.get("/", isLoggedIn, (req, res) => {
   res.render("home");
 });
 
