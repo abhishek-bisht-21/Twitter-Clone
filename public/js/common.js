@@ -5,12 +5,12 @@ async function refreshTweets() {
     const tweets = await axios.get('/api/post');
 
     for (let post of tweets.data) {
-        $('#allTweets').append(`<li>${post.content} by ${post.postedBy} </li>`);
+        $('#allTweets').prepend(`<li>${post.content} by ${post.postedBy} </li>`);
     }
   
 }
 
-refreshTweets();
+// refreshTweets();
 
 
 
@@ -21,7 +21,7 @@ $('#submitPostButton').click(async () => {
     const newPost=await axios.post('/api/post', { content: postText });
     console.log(newPost);
 
-    refreshTweets();
+    await refreshTweets();
 
     $('#post-text').val("");
 })

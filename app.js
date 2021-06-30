@@ -52,17 +52,15 @@ app.use(flash());
 
 
 
-app.use(authRoutes);
-
-
 passport.use(new LocalStrategy(User.authenticate()));
 // Behind the scenes these inbuilt functions manages creating and destroying the session of user
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// Using Routes
+app.use(authRoutes);
 
 // Using APIs
-
 app.use(postsApiRoute);
 
 app.get("/", isLoggedIn, (req, res) => {
